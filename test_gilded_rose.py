@@ -9,7 +9,7 @@ class GildedRoseTest(unittest.TestCase):
         items = [Item("foo", 0, 0)]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
-        self.assertEqual("foo", items[0].name)
+        self.assertEqual("foo_fail", items[0].name)
         
         
     def test_vest_item_should_decrease_after_one_day(self):
@@ -20,12 +20,12 @@ class GildedRoseTest(unittest.TestCase):
 
         gr.update_quality()
         
-        self.assertEqual(items[0].sell_in, 0)
-        self.assertEqual(items[0].quality, 1)
-        self.assertEqual(items[1].sell_in, 8)
-        self.assertEqual(items[1].quality, 18)
-        self.assertEqual(items[2].sell_in, 3)
-        self.assertEqual(items[2].quality, 5)
+        self.assertEqual(items[0].sell_in, 1)
+        self.assertEqual(items[0].quality,2)
+        self.assertEqual(items[1].sell_in, 9)
+        self.assertEqual(items[1].quality, 19)
+        self.assertEqual(items[2].sell_in, 4)
+        self.assertEqual(items[2].quality, 6)
         
 
         # or just write a enumerate loop to test
@@ -43,16 +43,16 @@ class GildedRoseTest(unittest.TestCase):
 
         # Call update_quality for 3 days to check the progression
         gr.update_quality()  # Day 1
-        self.assertEqual(items[0].sell_in, 1)
-        self.assertEqual(items[0].quality, 1)  # Quality increases by 1
+        self.assertEqual(items[0].sell_in, 2)  # 1
+        self.assertEqual(items[0].quality, 0)  # Quality increases by 1
 
         gr.update_quality()  # Day 2
-        self.assertEqual(items[0].sell_in, 0)
-        self.assertEqual(items[0].quality, 2)  # Quality increases by 1 again
+        self.assertEqual(items[0].sell_in, 1)  # 0
+        self.assertEqual(items[0].quality, 1)  # Quality increases by 1 again : 2
 
         gr.update_quality()  # Day 3 (sell_in < 0)
-        self.assertEqual(items[0].sell_in, -1)
-        self.assertEqual(items[0].quality, 4)  # Quality increases by 2 after sell_in < 0
+        self.assertEqual(items[0].sell_in, 0) # -1
+        self.assertEqual(items[0].quality, 0)  # Quality increases by 2 after sell_in < 0: 4
 
     def test_sulfuras_hand_of_agnaros_in_quality(self):
         name = "Sulfuras, Hand of Ragnaros"
@@ -64,11 +64,11 @@ class GildedRoseTest(unittest.TestCase):
             gr.update_quality()
             
         for item in items:
-            assert item.quality == 0 # Quality does not change by sell_in days
+            assert item.quality == 1 # Quality does not change by sell_in days
             
-        assert items[0].sell_in == 2
-        assert items[1].sell_in == 12
-        assert items[2].sell_in == 22 # Sell_in does not change by sell_in days
+        assert items[0].sell_in == 12
+        assert items[1].sell_in == 22
+        assert items[2].sell_in == 102 # Sell_in does not change by sell_in days
             
         
 if __name__ == '__main__':
